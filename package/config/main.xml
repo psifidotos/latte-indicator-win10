@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+  <group name="General">
+    <entry name="progressAnimationEnabled" type="Bool">
+        <default>true</default>
+    </entry>  
+    <entry name="enabledForApplets" type="Bool">
+        <default>true</default>
+    </entry>    
+    <entry name="maxBackgroundOpacity" type="Double">
+        <default>0.6</default>
+    </entry>
+    <entry name="lineThickness" type="Double">
+        <default>0.1</default>
+    </entry>
+    <entry name="appletPadding" type="Double">
+        <default>0.15</default>
+    </entry>
+    <entry name="lengthPadding" type="Double">
+        <default>0.35</default>
+    </entry>
+  </group>
+</kcfg>
