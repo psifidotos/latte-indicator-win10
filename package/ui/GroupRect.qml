@@ -33,7 +33,7 @@ Item{
 
     readonly property bool isUnhoveredSecondStacked: isSecondStackedBackLayer && !indicator.isHovered && root.backgroundOpacity === 0
 
-    readonly property int layerWidth: isUnhoveredSecondStacked ? 2 * (root.groupItemLength + 1) : root.groupItemLength + 1
+    readonly property int layerWidth: isUnhoveredSecondStacked ? 2 * (root.groupItemLength) : root.groupItemLength
 
     BackLayer{
         anchors.right: parent.right
@@ -44,5 +44,35 @@ Item{
 
         isSecondStackedBackLayer: parent.isSecondStackedBackLayer
         isThirdStackedBackLayer: parent.isThirdStackedBackLayer
+    }
+
+    Rectangle {
+        id: borderRect
+        width:1
+        height: parent.height - lineThickness
+        anchors.top: parent.top
+        anchors.left: parent.left
+        color: "#020202"//theme.backgroundColor
+        visible: (isSecondStackedBackLayer || isThirdStackedBackLayer) && root.backgroundOpacity>0
+        opacity: {
+            if (isSecondStackedBackLayer) {
+                return 0.2;
+            } else if (isThirdStackedBackLayer) {
+                return 0.30;
+            }
+
+            return 0;
+        }
+    }
+
+    Rectangle {
+        id: lineBorderRect
+        width: 1
+        height: lineThickness
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        color: "#020202"//theme.backgroundColor
+        visible: (isSecondStackedBackLayer || isThirdStackedBackLayer) && !isUnhoveredSecondStacked
+        opacity: borderRect.opacity
     }
 }

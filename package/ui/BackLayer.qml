@@ -35,7 +35,7 @@ Item{
         anchors.fill: parent
 
         radius: backRect.radius
-        color: theme.viewBackgroundColor
+        color: theme.textColor//theme.viewBackgroundColor
         visible: opacity > 0
         opacity: root.backgroundOpacity
 
@@ -45,16 +45,6 @@ Item{
                 duration: 120
                 easing.type: Easing.OutQuad
             }
-        }
-
-        Rectangle {
-            id: borderRect
-            width: parent.width
-            height: parent.height + 4
-            anchors.centerIn: parent
-            color: "transparent"
-            border.width: 1
-            border.color: isSecondStackedBackLayer || isThirdStackedBackLayer ? theme.backgroundColor : "transparent"
         }
     }
 
@@ -99,7 +89,7 @@ Item{
                     anchors.fill: parent
                     source: progressFrame
                     maskSource: progressMask
-                    opacity: 0.5
+                    opacity: 0.8
                 }
             }
         }

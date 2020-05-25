@@ -44,7 +44,7 @@ LatteComponents.IndicatorItem {
     readonly property int shownWindows: indicator.windowsCount - indicator.windowsMinimizedCount
     readonly property int maxDrawnMinimizedWindows: shownWindows > 0 ? Math.min(indicator.windowsMinimizedCount,2) : 3
 
-    readonly property int groupItemLength: indicator.currentIconSize * 0.12
+    readonly property int groupItemLength: indicator.currentIconSize * 0.18
     readonly property int groupsSideMargin: indicator.windowsCount <= 1 ? 0 : (Math.min(indicator.windowsCount-1,2) * root.groupItemLength)
 
     readonly property real backColorBrightness: colorBrightness(indicator.palette.backgroundColor)
@@ -151,10 +151,10 @@ LatteComponents.IndicatorItem {
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: {
                 if (isUnhoveredSecondStacked) {
-                    return (shrinkLengthEdge - width) + root.groupItemLength - 1 + offsetUnhoveredSecondStacked;
+                    return (shrinkLengthEdge - width) + root.groupItemLength - 1 + offsetUnhoveredSecondStacked - 2;
                 }
 
-                return indicator.windowsCount>2 && active ? groupItemLength : 0
+                return indicator.windowsCount>2 && active ? groupItemLength  : 0
             }
 
             height: parent.height
@@ -162,7 +162,7 @@ LatteComponents.IndicatorItem {
             opacity: 0.7
 
             readonly property bool isUnhoveredSecondStacked: active && !indicator.isHovered && root.backgroundOpacity === 0
-            readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? 2*(root.groupItemLength+1) : 0
+            readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? 2*(root.groupItemLength+1)+1 : 0
 
             sourceComponent: GroupRect{
                 isSecondStackedBackLayer: true
