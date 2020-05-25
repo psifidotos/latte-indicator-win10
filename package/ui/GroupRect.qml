@@ -24,14 +24,25 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item{
-    width: root.groupItemLength + 2
+    width: layerWidth
     height: parent.height
     clip: true
+
+    property bool isSecondStackedBackLayer: false
+    property bool isThirdStackedBackLayer: false
+
+    readonly property bool isUnhoveredSecondStacked: isSecondStackedBackLayer && !indicator.isHovered && root.backgroundOpacity === 0
+
+    readonly property int layerWidth: isUnhoveredSecondStacked ? 2 * (root.groupItemLength + 1) : root.groupItemLength + 1
 
     BackLayer{
         anchors.right: parent.right
         anchors.top: parent.top
+
         width: 4*parent.width
         height: parent.height
+
+        isSecondStackedBackLayer: parent.isSecondStackedBackLayer
+        isThirdStackedBackLayer: parent.isThirdStackedBackLayer
     }
 }

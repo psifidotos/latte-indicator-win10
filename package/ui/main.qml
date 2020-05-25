@@ -29,6 +29,8 @@ LatteComponents.IndicatorItem {
     id: root
     needsIconColors: true
     providesFrontLayer: false
+    providesHoveredAnimation: true
+    providesClickedAnimation: true
     minThicknessPadding: 0.03
     minLengthPadding: 0.25
 
@@ -42,7 +44,7 @@ LatteComponents.IndicatorItem {
     readonly property int shownWindows: indicator.windowsCount - indicator.windowsMinimizedCount
     readonly property int maxDrawnMinimizedWindows: shownWindows > 0 ? Math.min(indicator.windowsMinimizedCount,2) : 3
 
-    readonly property int groupItemLength: indicator.currentIconSize * 0.08
+    readonly property int groupItemLength: indicator.currentIconSize * 0.12
     readonly property int groupsSideMargin: indicator.windowsCount <= 1 ? 0 : (Math.min(indicator.windowsCount-1,2) * root.groupItemLength)
 
     readonly property real backColorBrightness: colorBrightness(indicator.palette.backgroundColor)
@@ -64,6 +66,29 @@ LatteComponents.IndicatorItem {
     // https://www.w3.org/TR/AERT/#color-contrast
     function colorBrightnessFromRGB(r, g, b) {
         return (r * 299 + g * 587 + b * 114) / 1000
+    }
+
+    readonly property int lineThickness: Math.max(indicator.currentIconSize * indicator.configuration.lineThickness, 2)
+    readonly property int shrinkLengthEdge: 0.13 * parent.width
+
+    readonly property real opacityStep: {
+        if (indicator.configuration.maxBackgroundOpacity >= 0.3) {
+            return 0.1;
+        }
+
+        return 0.05;
+    }
+
+    readonly property real backgroundOpacity: {
+        if (indicator.isHovered && indicator.hasActive) {
+            return indicator.configuration.maxBackgroundOpacity;
+        } else if (indicator.hasActive) {
+            return indicator.configuration.maxBackgroundOpacity - opacityStep;
+        } else if (indicator.isHovered) {
+            return indicator.configuration.maxBackgroundOpacity - 2*opacityStep;
+        }
+
+        return 0;
     }
 
 
@@ -107,35 +132,54 @@ LatteComponents.IndicatorItem {
         anchors.rightMargin: plasmoid.location === PlasmaCore.Types.RightEdge ? root.screenEdgeMargin : 0
 
         Loader {
+            id: thirdStackedLoader
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
 
             height: parent.height
-            active: indicator.windowsCount>=3
-            opacity: 0.3
+            active: indicator.windowsCount>=3 && backgroundOpacity > 0 && !secondStackedLoader.isUnhoveredSecondStacked
+            opacity: 0.4
 
             sourceComponent: GroupRect{
+                isThirdStackedBackLayer: true
             }
         }
 
         Loader {
+            id: secondStackedLoader
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: indicator.windowsCount>2 && active ? groupItemLength : 0
+            anchors.rightMargin: {
+                if (isUnhoveredSecondStacked) {
+                    return (shrinkLengthEdge - width) + root.groupItemLength - 1 + offsetUnhoveredSecondStacked;
+                }
+
+                return indicator.windowsCount>2 && active ? groupItemLength : 0
+            }
 
             height: parent.height
             active: indicator.windowsCount>=2
-            opacity: 0.6
+            opacity: 0.7
+
+            readonly property bool isUnhoveredSecondStacked: active && !indicator.isHovered && root.backgroundOpacity === 0
+            readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? 2*(root.groupItemLength+1) : 0
 
             sourceComponent: GroupRect{
+                isSecondStackedBackLayer: true
             }
         }
 
         Loader{
             id: backLayer
             anchors.fill: parent
-            anchors.rightMargin: groupsSideMargin
-            active: level.isBackground && (indicator.isActive || (indicator.isTask && !indicator.isLauncher))
+            anchors.rightMargin: {
+                if (secondStackedLoader.isUnhoveredSecondStacked) {
+                    return root.groupItemLength + secondStackedLoader.offsetUnhoveredSecondStacked;
+                }
+
+                return groupsSideMargin;
+            }
+            active: level.isBackground
 
             sourceComponent: BackLayer{
                 anchors.fill: parent

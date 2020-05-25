@@ -44,6 +44,105 @@ ColumnLayout {
         RowLayout {
             Layout.fillWidth: true
             spacing: units.smallSpacing
+
+            PlasmaComponents.Label {
+                Layout.minimumWidth: implicitWidth
+                horizontalAlignment: Text.AlignLeft
+                Layout.rightMargin: units.smallSpacing
+                text: i18n("Max Opacity")
+            }
+
+            LatteComponents.Slider {
+                id: maxOpacitySlider
+                Layout.fillWidth: true
+
+                leftPadding: 0
+                value: indicator.configuration.maxBackgroundOpacity * 100
+                from: 20
+                to: 100
+                stepSize: 1
+                wheelEnabled: false
+
+                function updateMaxOpacity() {
+                    if (!pressed) {
+                        indicator.configuration.maxBackgroundOpacity = value/100;
+                    }
+                }
+
+                onPressedChanged: {
+                    updateMaxOpacity();
+                }
+
+                Component.onCompleted: {
+                    valueChanged.connect(updateMaxOpacity);
+                }
+
+                Component.onDestruction: {
+                    valueChanged.disconnect(updateMaxOpacity);
+                }
+            }
+
+            PlasmaComponents.Label {
+                text: i18nc("number in percentage, e.g. 85 %","%0 %").arg(maxOpacitySlider.value)
+                horizontalAlignment: Text.AlignRight
+                Layout.minimumWidth: theme.mSize(theme.defaultFont).width * 4
+                Layout.maximumWidth: theme.mSize(theme.defaultFont).width * 4
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 2
+
+
+            PlasmaComponents.Label {
+                Layout.minimumWidth: implicitWidth
+                horizontalAlignment: Text.AlignLeft
+                Layout.rightMargin: units.smallSpacing
+                text: i18n("Line Thickness")
+            }
+
+            LatteComponents.Slider {
+                id: lineSlider
+                Layout.fillWidth: true
+
+                leftPadding: 0
+                value: indicator.configuration.lineThickness * 100
+                from: 2
+                to: 20
+                stepSize: 1
+                wheelEnabled: false
+
+                function updateLineThickness() {
+                    if (!pressed) {
+                        indicator.configuration.lineThickness = value/100;
+                    }
+                }
+
+                onPressedChanged: {
+                    updateLineThickness();
+                }
+
+                Component.onCompleted: {
+                    valueChanged.connect(updateLineThickness);
+                }
+
+                Component.onDestruction: {
+                    valueChanged.disconnect(updateLineThickness);
+                }
+            }
+
+            PlasmaComponents.Label {
+                text: i18nc("number in percentage, e.g. 85 %","%0 %").arg(lineSlider.value)
+                horizontalAlignment: Text.AlignRight
+                Layout.minimumWidth: theme.mSize(theme.defaultFont).width * 4
+                Layout.maximumWidth: theme.mSize(theme.defaultFont).width * 4
+            }
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: units.smallSpacing
             visible: deprecatedPropertiesAreHidden
 
             PlasmaComponents.Label {

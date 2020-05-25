@@ -27,14 +27,35 @@ Item{
     id: rectangleItem
 
     property bool isActive: indicator.isActive || (indicator.isWindow && indicator.hasActive)
+    property bool isSecondStackedBackLayer: false
+    property bool isThirdStackedBackLayer: false
     property bool showProgress: false
 
-    Rectangle {
+    Rectangle {        
         anchors.fill: parent
+
         radius: backRect.radius
         color: theme.viewBackgroundColor
-        visible: isActive
-        opacity: 0.75
+        visible: opacity > 0
+        opacity: root.backgroundOpacity
+
+        Behavior on opacity {
+            enabled: !isSecondStackedBackLayer && !isThirdStackedBackLayer
+            NumberAnimation {
+                duration: 120
+                easing.type: Easing.OutQuad
+            }
+        }
+
+        Rectangle {
+            id: borderRect
+            width: parent.width
+            height: parent.height + 4
+            anchors.centerIn: parent
+            color: "transparent"
+            border.width: 1
+            border.color: isSecondStackedBackLayer || isThirdStackedBackLayer ? theme.backgroundColor : "transparent"
+        }
     }
 
     Loader {
@@ -92,96 +113,23 @@ Item{
         clip: true
     }
 
-    /*RadialGradient{
-        id: glowGradient
-        anchors.verticalCenter: parent.top
-        anchors.horizontalCenter: parent.left
-        width: 2.5 * parent.width
-        height: 2 * parent.height
-        visible: false
-        clip: true
+    Rectangle {
+        id: activeLine
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
 
-        gradient: Gradient {
-            GradientStop { position: 0.0; color: "#ccfcfcfc"}
-            GradientStop { position: 0.05; color: "#bbfcfcfc"}
-            GradientStop { position: 0.2; color: "#55fcfcfc"}
-            GradientStop { position: 0.48; color: "transparent" }
-        }
-        //! States
-        states: [
-            State {
-                name: "top"
-                when: !indicator.configuration.glowReversed
+        width: root.backgroundOpacity > 0 || (isSecondStackedBackLayer && !indicator.isHovered) ? parent.width : parent.width - (2 * shrinkLengthEdge)
+        height: root.lineThickness
 
-                AnchorChanges {
-                    target: glowGradient
-                    anchors{horizontalCenter:parent.horizontalCenter; verticalCenter:parent.top}
-                }
-            },
-            State {
-                name: "bottom"
-                when: indicator.configuration.glowReversed
+        color: theme.highlightColor
+        visible: !indicator.isApplet && (rectangleItem.isActive || indicator.isWindow)
 
-                AnchorChanges {
-                    target: glowGradient
-                    anchors{horizontalCenter:parent.horizontalCenter; verticalCenter:parent.bottom}
-                }
+        Behavior on width {
+            enabled: !isSecondStackedBackLayer && !isThirdStackedBackLayer
+            NumberAnimation {
+                duration: 120
+                easing.type: Easing.OutQuad
             }
-        ]
+        }
     }
-
-    Item {
-        id: gradientMask
-        anchors.fill: glowGradient
-
-        Rectangle {
-            id: glowMaskRect
-            anchors.top: parent.verticalCenter
-            anchors.left: parent.horizontalCenter
-            width: root.width
-            height: root.height
-            radius: backRect.radius
-        }
-
-        visible: false
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-        clip: true
-
-        OpacityMask {
-            anchors.horizontalCenter: parent.left
-            anchors.verticalCenter: parent.top
-            width: glowGradient.width
-            height: glowGradient.height
-
-            source: glowGradient
-            maskSource: gradientMask
-            visible: backRect.visible || borderRectangle.visible
-            opacity: indicator.isHovered ? 0.75 : 0.6
-        }
-    }*/
-
-    /*
-    Rectangle {
-        id: borderRectangle
-        anchors.fill: parent
-        color: "transparent"
-        border.width: 1
-        border.color: "#cc101010"
-        radius: backRect.radius
-        clip: true
-
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: parent.border.width
-            radius: backRect.radius
-            color: "transparent"
-            border.width: 1
-            border.color: "#50dedede"
-        }
-    }*/
-
 }
