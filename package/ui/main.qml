@@ -44,7 +44,7 @@ LatteComponents.IndicatorItem {
     readonly property int shownWindows: indicator.windowsCount - indicator.windowsMinimizedCount
     readonly property int maxDrawnMinimizedWindows: shownWindows > 0 ? Math.min(indicator.windowsMinimizedCount,2) : 3
 
-    readonly property int groupItemLength: indicator.currentIconSize * 0.18
+    readonly property int groupItemLength: indicator.currentIconSize * 0.13
     readonly property int groupsSideMargin: indicator.windowsCount <= 1 ? 0 : (Math.min(indicator.windowsCount-1,2) * root.groupItemLength)
 
     readonly property real backColorBrightness: colorBrightness(indicator.palette.backgroundColor)
@@ -162,7 +162,8 @@ LatteComponents.IndicatorItem {
             opacity: 0.7
 
             readonly property bool isUnhoveredSecondStacked: active && !indicator.isHovered && root.backgroundOpacity === 0
-            readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? 2*(root.groupItemLength+1)+1 : 0
+            //readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? 2*(root.groupItemLength+1)+1 : 0
+            readonly property int offsetUnhoveredSecondStacked: isUnhoveredSecondStacked ? root.groupItemLength+3+groupsSideMargin : 0
 
             sourceComponent: GroupRect{
                 isSecondStackedBackLayer: true
