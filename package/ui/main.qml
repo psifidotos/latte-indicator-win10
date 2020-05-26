@@ -137,7 +137,7 @@ LatteComponents.IndicatorItem {
             anchors.verticalCenter: parent.verticalCenter
 
             height: parent.height
-            active: indicator.windowsCount>=3 && backgroundOpacity > 0 && !secondStackedLoader.isUnhoveredSecondStacked
+            active: indicator.windowsCount>=3 && backgroundOpacity > 0 && !secondStackedLoader.isUnhoveredSecondStacked && !indicator.inRemoving
             opacity: 0.4
 
             sourceComponent: GroupRect{
@@ -158,7 +158,7 @@ LatteComponents.IndicatorItem {
             }
 
             height: parent.height
-            active: indicator.windowsCount>=2
+            active: indicator.windowsCount>=2 && !indicator.inRemoving
             opacity: 0.7
 
             readonly property bool isUnhoveredSecondStacked: active && !indicator.isHovered && root.backgroundOpacity === 0
@@ -180,7 +180,7 @@ LatteComponents.IndicatorItem {
 
                 return groupsSideMargin;
             }
-            active: level.isBackground
+            active: level.isBackground && !indicator.inRemoving
 
             sourceComponent: BackLayer{
                 anchors.fill: parent
