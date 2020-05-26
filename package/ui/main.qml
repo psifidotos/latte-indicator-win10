@@ -151,7 +151,7 @@ LatteComponents.IndicatorItem {
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: {
                 if (isUnhoveredSecondStacked) {
-                    return (shrinkLengthEdge - width) + root.groupItemLength - 1 + offsetUnhoveredSecondStacked - 2;
+                    return (shrinkLengthEdge - width) - 1 + offsetUnhoveredSecondStacked - 2;
                 }
 
                 return indicator.windowsCount>2 && active ? groupItemLength  : 0

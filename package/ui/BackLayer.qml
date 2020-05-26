@@ -31,7 +31,7 @@ Item{
     property bool isThirdStackedBackLayer: false
     property bool showProgress: false
 
-    Rectangle {        
+    Rectangle {
         anchors.fill: parent
 
         radius: backRect.radius
@@ -108,10 +108,21 @@ Item{
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
-        width: root.backgroundOpacity > 0 || (isSecondStackedBackLayer && !indicator.isHovered) ? parent.width : parent.width - (2 * shrinkLengthEdge)
+        width: {
+            if (root.backgroundOpacity > 0 || (isSecondStackedBackLayer && !indicator.isHovered)) {
+                return parent.width;
+            }
+
+            if (!isSecondStackedBackLayer && !isThirdStackedBackLayer && !indicator.isHovered && indicator.windowsCount>=2) {
+                return parent.width - shrinkLengthEdge;
+            }
+
+            return parent.width - (2 * shrinkLengthEdge);
+        }
+
         height: root.lineThickness
 
-        color: theme.highlightColor
+        color: root.activeColor
         visible: !indicator.isApplet && (rectangleItem.isActive || indicator.isWindow)
 
         Behavior on width {
