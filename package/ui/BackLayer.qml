@@ -72,7 +72,7 @@ Item{
 
                 Rectangle {
                     anchors.fill: parent
-                    anchors.margins: 1
+                    anchors.margins: Number(!indicator.configuration.hideProgressMargins)
                     radius: backRect.radius
                     color: "red"
                 }
@@ -105,11 +105,16 @@ Item{
 
     Rectangle {
         id: activeLine
-        anchors.bottom: parent.bottom
+
+        anchors.top: plasmoid.location === PlasmaCore.Types.TopEdge ? parent.top : undefined
+        anchors.bottom: plasmoid.location !== PlasmaCore.Types.TopEdge ? parent.bottom : undefined
+
         anchors.horizontalCenter: parent.horizontalCenter
 
+        property bool maximizeLineOnProgress: indicator.configuration.maximizeActiveLineOnProgress && indicator.configuration.progressAnimationEnabled && rectangleItem.showProgress && indicator.progress>0
+
         width: {
-            if (root.backgroundOpacity > 0 || (isSecondStackedBackLayer && !indicator.isHovered)) {
+            if (root.backgroundOpacity > 0 || (isSecondStackedBackLayer && !indicator.isHovered) || maximizeLineOnProgress) {
                 return parent.width;
             }
 

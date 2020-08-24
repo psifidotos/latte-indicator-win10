@@ -246,17 +246,39 @@ ColumnLayout {
                 indicator.configuration.progressAnimationEnabled = !indicator.configuration.progressAnimationEnabled
             }
         }
-    }
 
-    LatteComponents.CheckBox {
-        Layout.maximumWidth: dialog.optionsWidth
-        text: i18n("Show indicators for applets")
-        checked: indicator.configuration.enabledForApplets
-        tooltip: i18n("Indicators are shown for applets")
-        visible: deprecatedPropertiesAreHidden
+        LatteComponents.CheckBox {
+            Layout.maximumWidth: dialog.optionsWidth
+            text: i18n("Show indicators for applets")
+            checked: indicator.configuration.enabledForApplets
+            tooltip: i18n("Indicators are shown for applets")
+            visible: deprecatedPropertiesAreHidden
 
-        onClicked: {
-            indicator.configuration.enabledForApplets = !indicator.configuration.enabledForApplets;
+            onClicked: {
+                indicator.configuration.enabledForApplets = !indicator.configuration.enabledForApplets;
+            }
+        }
+
+        LatteComponents.CheckBox {
+            Layout.maximumWidth: dialog.optionsWidth
+            text: i18n("Hide background progressbar margins")
+            checked: indicator.configuration.hideProgressMargins
+            tooltip: i18n("Don’t show margins around backdrop progressbar on the task button")
+
+            onClicked: {
+                indicator.configuration.hideProgressMargins = !indicator.configuration.hideProgressMargins
+            }
+        }
+
+        LatteComponents.CheckBox {
+            Layout.maximumWidth: dialog.optionsWidth
+            text: i18n("Maximize indicator line when progressbar is active")
+            checked: indicator.configuration.maximizeActiveLineOnProgress
+            tooltip: i18n("Show full-size active task indicator line, when the task button has actove backdrop progressbar")
+
+            onClicked: {
+                indicator.configuration.maximizeActiveLineOnProgress = !indicator.configuration.maximizeActiveLineOnProgress
+            }
         }
     }
 }
